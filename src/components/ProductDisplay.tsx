@@ -1,5 +1,6 @@
 
-import { useEffect, useRef, useState } from 'react';
+import { useState, useRef } from 'react';
+import { Button } from '@/components/ui/button';
 import ScrollAnimation from './ScrollAnimation';
 
 const products = [
@@ -26,51 +27,10 @@ const products = [
 const ProductDisplay = () => {
   const [activeProduct, setActiveProduct] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
   
-  // Progressive image loading logic
-  useEffect(() => {
-    const images = imageRefs.current.filter(Boolean) as HTMLImageElement[];
-    
-    images.forEach((img) => {
-      const actualSrc = img.dataset.src;
-      if (!actualSrc) return;
-      
-      const tempImage = new Image();
-      tempImage.src = actualSrc;
-      tempImage.onload = () => {
-        img.src = actualSrc;
-        img.classList.add('loaded');
-      };
-    });
-  }, []);
-  
-  // Parallax effect on scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current) return;
-      
-      const rect = containerRef.current.getBoundingClientRect();
-      const scrollProgress = 1 - (rect.top + 300) / window.innerHeight;
-      
-      if (scrollProgress > 0 && scrollProgress < 1) {
-        const translateY = Math.min(200, scrollProgress * 100);
-        imageRefs.current.forEach((img, index) => {
-          if (img) {
-            const speedFactor = 0.8 + (index * 0.2);
-            img.style.transform = `translateY(-${translateY * speedFactor}px)`;
-          }
-        });
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
-    <section id="products" className="py-24 relative overflow-hidden" ref={containerRef}>
-      <div className="container px-6">
+    <section id="products" className="py-20 bg-white" ref={containerRef}>
+      <div className="container mx-auto px-6">
         <ScrollAnimation>
           <div className="text-center mb-16">
             <div className="text-accent font-medium mb-3">Our Collection</div>
@@ -81,16 +41,16 @@ const ProductDisplay = () => {
           </div>
         </ScrollAnimation>
         
-        <div className="flex flex-col lg:flex-row gap-12">
+        <div className="flex flex-col lg:flex-row gap-10 items-start">
           {/* Product Selector */}
-          <div className="lg:w-1/3">
-            <ScrollAnimation stagger className="space-y-6">
+          <div className="lg:w-1/3 space-y-4">
+            <ScrollAnimation stagger>
               {products.map((product, index) => (
                 <div 
                   key={product.id}
-                  className={`p-6 rounded-xl transition-all duration-300 cursor-pointer ${
+                  className={`p-5 rounded-xl transition-all duration-300 cursor-pointer ${
                     activeProduct === index 
-                      ? 'bg-secondary border-l-4 border-accent' 
+                      ? 'bg-secondary border-l-4 border-accent shadow-md' 
                       : 'hover:bg-secondary/50'
                   }`}
                   onClick={() => setActiveProduct(index)}
@@ -100,29 +60,34 @@ const ProductDisplay = () => {
                 </div>
               ))}
             </ScrollAnimation>
+            
+            <div className="pt-4">
+              <Button variant="default" className="w-full lg:w-auto">
+                View All Products
+              </Button>
+            </div>
           </div>
           
           {/* Product Display */}
           <div className="lg:w-2/3">
-            <div className="relative h-[400px] md:h-[500px] overflow-hidden rounded-2xl shadow-xl">
+            <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-xl bg-white">
               {products.map((product, index) => (
                 <div 
                   key={product.id}
-                  className={`absolute inset-0 transition-opacity duration-1000 ${
+                  className={`absolute inset-0 transition-opacity duration-700 ${
                     activeProduct === index ? 'opacity-100 z-10' : 'opacity-0 z-0'
                   }`}
                 >
                   <img
-                    ref={el => imageRefs.current[index] = el}
-                    src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjFmMWYxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg=="
-                    data-src={product.image}
+                    src={product.image}
                     alt={product.name}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] ease-out"
-                    style={{ transform: 'scale(1.1)' }}
+                    className="absolute inset-0 w-full h-full object-cover"
                   />
-                  <div className="absolute bottom-0 left-0 p-8 z-20">
-                    <h4 className="text-white text-2xl font-medium mb-2 drop-shadow-md">{product.name}</h4>
-                    <p className="text-white drop-shadow-md">{product.description}</p>
+                  <div className="absolute inset-0 flex flex-col justify-end p-8">
+                    <div className="bg-white/80 backdrop-blur-sm p-6 rounded-xl">
+                      <h4 className="text-black text-2xl font-medium mb-2">{product.name}</h4>
+                      <p className="text-gray-700">{product.description}</p>
+                    </div>
                   </div>
                 </div>
               ))}
