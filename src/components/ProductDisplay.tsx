@@ -1,5 +1,5 @@
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import ScrollAnimation from './ScrollAnimation';
 
@@ -26,10 +26,9 @@ const products = [
 
 const ProductDisplay = () => {
   const [activeProduct, setActiveProduct] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
   
   return (
-    <section id="products" className="py-20 bg-white" ref={containerRef}>
+    <section id="products" className="py-20 bg-white">
       <div className="container mx-auto px-6">
         <ScrollAnimation>
           <div className="text-center mb-16">
@@ -70,7 +69,7 @@ const ProductDisplay = () => {
           
           {/* Product Display */}
           <div className="lg:w-2/3">
-            <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-xl bg-white">
+            <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-xl">
               {products.map((product, index) => (
                 <div 
                   key={product.id}
@@ -81,10 +80,10 @@ const ProductDisplay = () => {
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 flex flex-col justify-end p-8">
-                    <div className="bg-white/80 backdrop-blur-sm p-6 rounded-xl">
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <div className="p-4 rounded-xl bg-white/80 backdrop-blur-sm">
                       <h4 className="text-black text-2xl font-medium mb-2">{product.name}</h4>
                       <p className="text-gray-700">{product.description}</p>
                     </div>
