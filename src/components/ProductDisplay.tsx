@@ -112,7 +112,6 @@ const ProductDisplay = () => {
                     activeProduct === index ? 'opacity-100 z-10' : 'opacity-0 z-0'
                   }`}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10"></div>
                   <img
                     ref={el => imageRefs.current[index] = el}
                     src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjFmMWYxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg=="
@@ -121,9 +120,9 @@ const ProductDisplay = () => {
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] ease-out"
                     style={{ transform: 'scale(1.1)' }}
                   />
-                  <div className="absolute bottom-0 left-0 p-8 z-20">
+                  <div className="absolute bottom-0 left-0 right-0 p-8 z-20 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
                     <h4 className="text-white text-2xl font-medium mb-2">{product.name}</h4>
-                    <p className="text-white/80">{product.description}</p>
+                    <p className="text-white/90">{product.description}</p>
                   </div>
                 </div>
               ))}
